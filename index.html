@@ -25,7 +25,7 @@
 
     form.addEventListener('submit', e => {
         e.preventDefault()
-        fetch(scriptURL, {
+        fetch(script, {
                 method: 'POST',
                 body: new FormData(form)
             })
