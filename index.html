@@ -9,7 +9,31 @@
 </head>
 
 <body>
-    <h1>Hello Mridul</h1>
+    <div id="account">
+        <form method="post" name="create">
+            <input type="text" name="Name">
+            <input type="text" name="uid">
+            <input type="email" name="email">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </body>
+<script>
+    const script = "https://script.google.com/macros/s/AKfycbxk7qo1uuuKIjRI_xY5GHtt2mcmdqFY4XPe7RE_dB8EEN94piWUaZqSq64HSmfKi5JU/exec"
+
+    const form = document.forms['create']
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+        fetch(scriptURL, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => {
+                document.getElementById('account').innerHTML = "Account Created";
+            })
+            .catch(error => console.error('Error!', error.message))
+    })
+</script>
 
 </html>
