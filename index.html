@@ -6,6 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <!-- Facebook Metas -->
+    <meta property="og:title" content="Apars Classroom">
+    <meta property="og:site_name" content="Apar's Classroom">
+    <meta property="og:description" content="Welcome to Apar's Army 🔥🔥🔥">
+    <meta property="og:image" content="https://aparsclassroom.com/images/poster.jpg">
+    <meta property="og:image:secure_url" content="https://aparsclassroom.com/images/poster.jpg">
+    <meta property="og:image:type" content="image/jpg">
+
 </head>
 
 <body>
@@ -22,10 +31,17 @@
     </div>
     <div id="account">
     </div>
-    <button id="logout">Log Out</button>
+    <button id="logout">Log Out</button><br><br>
+    <button id="share">share</button>
 </body>
 
 <script>
+    document.getElementById('share').addEventListener('click', () => {
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+width=0,height=0,left=-1000,top=-1000`;
+
+        open('https://www.facebook.com/sharer.php?u=https://asgmicrocourse.github.io/', 'share', params);
+    })
     var creates = document.getElementById('creates');
     var account = document.getElementById('account');
     var logout = document.getElementById('logout');
