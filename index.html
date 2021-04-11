@@ -9,20 +9,28 @@
 </head>
 
 <body>
-    <div id="account">
+    <div id="creates">
         <form method="post" name="create">
-            <input type="text" name="Name">
-            <input type="text" name="uid">
-            <input type="email" name="email">
-            <button type="submit">Submit</button>
+            <label for="name">Name : </label>
+            <input type="text" name="name" id="name"><br>
+            <label for="email">Email : </label>
+            <input type="email" name="email" id="email"><br>
+            <label for="uid">Password : </label>
+            <input type="text" name="uid" id="uid"><br>
+            <button type="submit">Create</button>
         </form>
     </div>
+    <div id="account">
+    </div>
+    <button id="logout">Log Out</button>
 </body>
+
 <script>
-    const script = "https://script.google.com/macros/s/AKfycbxk7qo1uuuKIjRI_xY5GHtt2mcmdqFY4XPe7RE_dB8EEN94piWUaZqSq64HSmfKi5JU/exec"
-
+    var creates = document.getElementById('creates');
+    var account = document.getElementById('account');
+    var logout = document.getElementById('logout');
+    var uidN = document.getElementById('uid');
     const form = document.forms['create']
-
     form.addEventListener('submit', e => {
         e.preventDefault()
         fetch(script, {
@@ -30,10 +38,48 @@
                 body: new FormData(form)
             })
             .then(response => {
-                document.getElementById('account').innerHTML = "Account Created";
+                localStorage.setItem('uid', uidN.value)
+                getUser()
             })
             .catch(error => console.error('Error!', error.message))
     })
+
+    const script = "https://script.google.com/macros/s/AKfycbxno7-OaecI-tMiIEw0xahXGLPePTwP31K-UJuZKVdNzCRFG5DjiKcbQPA34uhxrFE5/exec"
+
+    getUser()
+
+    function getUser() {
+        var user = localStorage.getItem('uid');
+        fetch(script + '?q=get&uid=' + user)
+            .then((res) => {
+                return res.json()
+            }).then((data) => {
+                if (data.code === 200) {
+                    creates.style.display = "none";
+                    account.style.display = "block";
+                    logout.style.display = "block";
+                    account.innerHTML = `
+                    Name : ${data.name}<br>
+                    Joined : ${data.Joined}<br>
+                    Roll : ${data.Serial}<br>
+                    College : ${data.college}<br>
+                    phone : ${data.phone}<br>
+                    `;
+                    logout.addEventListener('click', () => {
+                        localStorage.removeItem('uid');
+                        getUser()
+                    })
+                } else {
+                    creates.style.display = "block";
+                    logout.style.display = "none";
+                    account.style.display = "none";
+                }
+
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 </script>
 
 </html>
