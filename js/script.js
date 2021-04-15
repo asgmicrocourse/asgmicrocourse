@@ -9,7 +9,7 @@ let day = c_date.getDay();
 let month = c_date.getMonth();
 let year = c_date.getFullYear();
 
-const script = "https://script.google.com/macros/s/AKfycbyMpP_Ue_Ml0hyc2M-vtyOw3nkoHfJWnXDhXlWVwyrJ8ZHswu4JrBY876kigRb76AEM/exec";
+const script = "https://script.google.com/macros/s/AKfycbzf8oosFpS2v2Uihyrsn9ycL6k89gu_s2_8C1qZglqCkUffgmMKOESWyFe6Ce_QuiQ1/exec";
 let storedEvents;
 $(function() {
 
@@ -155,10 +155,20 @@ renderCalendar(month, year)
             let eventsList = Object.keys(eventsToday).map(k => eventsToday[k]);
             if(eventsList.length>0){
                 let eventsLi ='';
-                eventsList.forEach(event =>  $('.events-today').html(eventsLi +=`<div class="alert alert-secondary fade show" role="alert">
-                Class No . ${event.id}<br>
-                <span style="font-size:20px;color:blue">${event.class}</span><br>Time : ${event.classTime}<br>Teacher : ${event.Teacher}<br><a class="btn btn-primary btn-sm" href="${event.link}" target="_blank">Class Link</a>
-              </div>`));
+                eventsList.forEach(event =>  {
+                    if(event.Status === "Done") {
+                        $('.events-today').html(eventsLi +=`<div class="alert alert-secondary fade show" role="alert">
+                        Class No . ${event.id} &nbsp;&nbsp;&nbsp; <span style="font-size:18px;color:green"> Status : ${event.Status}</span><br> 
+                        <span style="font-size:20px;color:blue">${event.class}</span><br>Time : ${event.classTime}<br>Teacher : ${event.Teacher}<br><a class="btn btn-primary btn-sm" href="${event.link}" target="_blank">Class Link</a>
+                      </div>`)
+                    }else {
+                        $('.events-today').html(eventsLi +=`<div class="alert alert-secondary fade show" role="alert">
+                        Class No . ${event.id} &nbsp;&nbsp;&nbsp; <span style="font-size:18px;color:red"> Status : ${event.Status}</span><br> 
+                        <span style="font-size:20px;color:blue">${event.class}</span><br>Time : ${event.classTime}<br>Teacher : ${event.Teacher}<br><a class="btn btn-primary btn-sm" href="${event.link}" target="_blank">Class Link</a>
+                      </div>`)
+                    }
+                }
+                );
             }else{
                 $('.events-today').html('<h5 class="text-center">No Class Today 😶</h5 class="text-center">');
             }               
@@ -176,17 +186,24 @@ renderCalendar(month, year)
     month = (month + 1) % 12;
     renderCalendar(month, year);
     })
-    
+ 
     $(document).on('click', '.showEvent', function(){
     $('.showEvent').removeClass('active');
     $('#event').removeClass('d-none');
     $(this).addClass('active');
     let todaysDate = $(this).text() +' '+ (months[month]) +' '+ year;
     let eventDay = days[new Date(year, month, $(this).text()).getDay()];
-    let classDate = $(this).text() + month + year;
-    $('.event-date').html(todaysDate).data('classDate', classDate);
-    $('.event-day').html(eventDay);
-    showEvent(classDate);
+    if (month > 9) {
+        let classDate =   year + "-" + (month + 1) +"-" + $(this).text();
+        $('.event-date').html(todaysDate).data('classDate', classDate);
+        $('.event-day').html(eventDay);
+        return showEvent(classDate);
+    } else {
+        let classDate =   year + "-" + 0 + (month + 1) +"-" + $(this).text();
+        $('.event-date').html(todaysDate).data('classDate', classDate);
+        $('.event-day').html(eventDay);
+        return showEvent(classDate);
+    }
     })
     $(document).on('click', '.hide', function(){
     $('#event').addClass('d-none');
